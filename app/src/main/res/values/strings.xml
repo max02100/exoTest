@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ExomindTest</string>
+    <string name="search_user">Chercher un utilisateur</string>
 </resources>
