@@ -11,14 +11,14 @@
         android:id="@+id/photosToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:title="Photos"
+        app:title="Albums"
         app:navigationIcon="@drawable/ic_arrow_back"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/photosRecyclerView"
+        android:id="@+id/albumsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="vertical"/>
 
 </LinearLayout>
