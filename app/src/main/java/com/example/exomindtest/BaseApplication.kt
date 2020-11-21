@@ -2,6 +2,7 @@ package com.example.exomindtest
 
 import android.app.Application
 import com.example.exomindtest.data.di.ApiModule
+import com.example.exomindtest.data.di.DatabaseModule
 import com.example.exomindtest.data.di.RepositoryModule
 import com.example.exomindtest.data.di.ViewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -22,7 +23,8 @@ class BaseApplication : Application() {
                     RepositoryModule.module,
                     ApiModule.retrofitModule,
                     ApiModule.servicesModule,
-                    ApiModule.apiDataSourcesModule
+                    ApiModule.apiDataSourcesModule,
+                    DatabaseModule.module
                 )
             )
             koin.createRootScope()

@@ -4,6 +4,6 @@ import org.koin.dsl.module
 
 object RepositoryModule {
     val module = module {
-        single { Repository(get(), get(), get()) }
+        single { Repository(get(), get(), get(), get()) }
     }
 }

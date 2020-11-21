@@ -1,25 +1,16 @@
 package com.example.exomindtest.data.entities
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-
+@Entity(tableName = "Users")
 data class User(
-    @field:Json(name = "address")
-    val address: Address?,
-    @field:Json(name = "company")
-    val company: Company?,
-    @field:Json(name = "email")
-    val email: String?,
+    @PrimaryKey
     @field:Json(name = "id")
-    val id: Int?,
+    val id: Int,
     @field:Json(name = "name")
-    val name: String?,
-    @field:Json(name = "phone")
-    val phone: String?,
-    @field:Json(name = "username")
-    val username: String?,
-    @field:Json(name = "website")
-    val website: String?
+    val name: String?
 )

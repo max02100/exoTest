@@ -19,23 +19,21 @@ class AlbumsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_albums)
 
         intent.extras?.let { extras ->
-            if (extras.containsKey("userId")) {
-                extras.getInt("userId")?.let {
-                    viewModel.getAlbums(it).observe(this, { data ->
-                        if (data.status == ApiResource.Status.SUCCESS) {
-                            albumsRecyclerView.apply {
-                                setHasFixedSize(true)
-                                data.data?.let {
-                                    adapter = AlbumAdapter(it) { id: Int ->
-                                        run {
-                                            val intent = Intent(
-                                                this@AlbumsActivity,
-                                                PhotosActivity::class.java
-                                            ).apply {
-                                                putExtra("id", id)
-                                            }
-                                            this@AlbumsActivity.startActivity(intent)
+            if (extras.containsKey("id")) {
+                extras.getInt("id").let {
+                    viewModel.getAlbumsFromDB(it).observe(this, { data ->
+                        albumsRecyclerView.apply {
+                            setHasFixedSize(true)
+                            data?.let {
+                                adapter = AlbumAdapter(it) { id: Int ->
+                                    run {
+                                        val intent = Intent(
+                                            this@AlbumsActivity,
+                                            PhotosActivity::class.java
+                                        ).apply {
+                                            putExtra("id", id)
                                         }
+                                        this@AlbumsActivity.startActivity(intent)
                                     }
                                 }
                             }

@@ -29,7 +29,7 @@ abstract class BaseDataSource {
 
 fun <A> performGetOperation(
     databaseQuery: (() -> LiveData<A>)? = null,
-    networkCall: suspend () -> ApiResource<A>,
+    networkCall: (suspend () -> ApiResource<A>)? = null,
     saveCallResult: (suspend (A?) -> Unit)? = null,
     userDatabaseInPriority: Boolean = false
 ): LiveData<ApiResource<A>> =
@@ -37,20 +37,21 @@ fun <A> performGetOperation(
         emit(ApiResource.loading())
         val source = MutableLiveData<ApiResource<A>>()
         databaseQuery?.invoke()?.let {
-            source.value = it.map { ApiResource.success(it) }.value
-            if (userDatabaseInPriority) {
-                emitSource(source)
-            }
+            source.postValue(it.map { ApiResource.success(it) }.value)
+            emitSource(source)
         }
 
-        val responseStatus = networkCall.invoke()
-        if (responseStatus.status == ApiResource.Status.SUCCESS) {
-            responseStatus.data?.let { source.postValue(ApiResource.success(it)) }
-            if (!userDatabaseInPriority)
-                emitSource(source)
-            saveCallResult?.let { it(responseStatus.data) }
-        } else if (responseStatus.status == ApiResource.Status.ERROR) {
-            emit(ApiResource.error(responseStatus.message!!))
-            emitSource(source)
+        if (!userDatabaseInPriority) {
+            networkCall?.let {
+                val responseStatus = it.invoke()
+                if (responseStatus.status == ApiResource.Status.SUCCESS) {
+                    responseStatus.data?.let { source.postValue(ApiResource.success(it)) }
+                    emitSource(source)
+                    saveCallResult?.let { it(responseStatus.data) }
+                } else {
+                    emit(ApiResource.error(responseStatus.message!!))
+                    emitSource(source)
+                }
+            }
         }
     }
